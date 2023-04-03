@@ -22,5 +22,5 @@ RUN chmod +x entrypoint && \
     # Clean up
     apt-get remove -y --purge curl wget jq && \
     apt-get clean
-WORKDIR ./
+WORKDIR /velociraptor
 CMD ["/entrypoint"]
