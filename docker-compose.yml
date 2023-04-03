@@ -3,9 +3,9 @@ services:
   velociraptor:
     #container_name: velociraptor
     image: wlambert/velociraptor
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    #build:
+    #  context: ./
+    #  dockerfile: Dockerfile
     volumes:
       - ./entrypoint:/entrypoint:ro
       - velo_api:/api/
