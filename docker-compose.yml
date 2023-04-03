@@ -1,13 +1,13 @@
-version: "3"
+version: "3.9"
 services:
   velociraptor:
-    #container_name: velociraptor
-    image: wlambert/velociraptor-docker
-    #build:
-    #  context: ./
-    #  dockerfile: Dockerfile
+    container_name: velociraptor
+    #image: wlambert/velociraptor-docker
+    build:
+      context: ./
+      dockerfile: Dockerfile
     volumes:
-      #- ./entrypoint:/entrypoint:ro
+      - ./entrypoint:/entrypoint:ro
       - velo_api:/api/
     environment:
       - VELO_USER=${VELO_USER}
