@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   velociraptor:
-    container_name: velociraptor
+    #container_name: velociraptor
     #image: wlambert/velociraptor-docker
     build:
       context: .
