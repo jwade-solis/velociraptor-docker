@@ -23,4 +23,4 @@ RUN chmod +x entrypoint && \
     apt-get remove -y --purge curl wget jq && \
     apt-get clean
 WORKDIR ./
-CMD ["./entrypoint"]
+CMD ["/entrypoint"]
