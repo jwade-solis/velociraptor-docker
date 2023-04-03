@@ -2,7 +2,7 @@ version: "3"
 services:
   velociraptor:
     #container_name: velociraptor
-    image: wlambert/velociraptor
+    image: wlambert/velociraptor-docker
     #build:
     #  context: ./
     #  dockerfile: Dockerfile
