@@ -1,21 +1,23 @@
-version: '2'
+version: '3.9'
 services:
   velociraptor:
     container_name: velociraptor
     #image: wlambert/velociraptor
     build:
-      context: ./
+      context: ./velociraptor
       dockerfile: Dockerfile
     volumes:
-      - ./velociraptor:/velociraptor/:rw
+      - ./velociraptor_data:/velociraptor/:rw
+      - ./velociraptor/custom:/custom:ro
+      - ./velociraptor/entrypoint:/entrypoint:ro
+      - velo_api:/api/
     environment:
-      - VELOX_USER=${VELOX_USER}
-      - VELOX_PASSWORD=${VELOX_PASSWORD}
-      - VELOX_ROLE=${VELOX_ROLE}
-      - VELOX_SERVER_URL=${VELOX_SERVER_URL}
-      - VELOX_FRONTEND_HOSTNAME=${VELOX_FRONTEND_HOSTNAME}
+      - VELO_USER=${VELO_USER}
+      - VELO_PASSWORD=${VELO_PASSWORD}
+      - VELO_ROLE=${VELO_ROLE}
+      - VELO_SERVER_URL=${VELO_SERVER_URL}
+      - VELO_FRONTEND_HOSTNAME=${VELO_FRONTEND_HOSTNAME}
     ports:
       - "8000:8000"
       - "8001:8001"
       - "8889:8889"
-    restart: unless-stopped
