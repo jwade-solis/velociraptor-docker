@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./entrypoint:/entrypoint:ro
+      - ./entrypoint:./entrypoint:ro
       - velo_api:/api/
     environment:
       - VELO_USER=${VELO_USER}
@@ -19,6 +19,6 @@ services:
       - "8000:8000"
       - "8001:8001"
       - "8889:8889"
-    entrypoint: sh -c "/entrypoint"
+    entrypoint: sh -c "./entrypoint"
 volumes:
   velo_api:
