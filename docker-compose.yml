@@ -19,5 +19,6 @@ services:
       - "8000:8000"
       - "8001:8001"
       - "8889:8889"
+    entrypoint: sh -c "/entrypoint"
 volumes:
   velo_api:
