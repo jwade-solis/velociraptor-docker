@@ -2,23 +2,30 @@ version: "3"
 services:
   velociraptor:
     #container_name: velociraptor
-    image: wlambert/velociraptor
+    #image: wlambert/velociraptor
     build:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./entrypoint:/entrypoint:ro
-      - velo_api:/api/
+      - ./velociraptor:/velociraptor/:rw
     environment:
-      - VELO_USER=${VELO_USER}
-      - VELO_PASSWORD=${VELO_PASSWORD}
-      - VELO_ROLE=${VELO_ROLE}
-      - VELO_SERVER_URL=${VELO_SERVER_URL}
-      - VELO_FRONTEND_HOSTNAME=${VELO_FRONTEND_HOSTNAME}
+      - VELOX_USER=${VELOX_USER}
+      - VELOX_PASSWORD=${VELOX_PASSWORD}
+      - VELOX_ROLE=${VELOX_ROLE}
+      - VELOX_CLIENT_URL=${VELOX_CLIENT_URL}
+      - VELOX_FRONTEND_HOSTNAME=${VELOX_FRONTEND_HOSTNAME}
+      - VELOX_DEV=${VELOX_DEV:-false}
+      - VELOX_GDRIVE=${VELOX_GDRIVE}
+      - VELOX_PLAIN_HTTP=${VELOX_PLAIN_HTTP:-false}
+      - VELOX_GUI_URL=${VELOX_GUI_URL}
+      - VELOX_SSO=${VELOX_SSO:-false}
+      - VELOX_FIRST_USER=${VELOX_FIRST_USER}
+      - VELOX_SSO_TYPE=${VELOX_SSO_TYPE}
+      - VELOX_AZURE_CLIENTID=${VELOX_AZURE_CLIENTID}
+      - VELOX_AZURE_SECRET=${VELOX_AZURE_SECRET}
+      - VELOX_AZURE_TENANT=${VELOX_AZURE_TENANT}
     ports:
       - "8000:8000"
       - "8001:8001"
       - "8889:8889"
-    entrypoint: sh -c "/entrypoint"
-volumes:
-  velo_api:
+    restart: unless-stopped
