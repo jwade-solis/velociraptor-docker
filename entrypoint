@@ -2,10 +2,15 @@
 set -e
 BIND_ADDRESS="0.0.0.0"
 PUBLIC_PATH="public"
-LOG_DIR="."
 DATASTORE_LOCATION="./"
 FILESTORE_DIRECTORY="./"
 CLIENT_DIR="/velociraptor/clients"
+# Env variables with default vaules
+LOG_DIR=${VELOX_LOG_DIR:-"."}
+VELOX_DEV=${VELOX_DEV:-false}
+VELOX_SSO=${VELOX_SSO:-false}
+VELOX_SELF_SIGNED=${VELOX_SELF_SIGNED:-true}
+VELOX_CLIENT_FQDN=${VELOX_CLIENT_FQDN:-false}
 VELOX_DEV_FILE=/opt/velociraptor/dev/velociraptor
 
 # Move binaries into place
@@ -26,12 +31,12 @@ if [[ ! -f server.config.yaml ]]; then
 	# Default config
 	if [[ "$VELOX_SSO" = false ]]; then
 		if [[ "$VELOX_PLAIN_HTTP" = true ]]; then
-			./velociraptor config generate > server.config.yaml --merge '{"Frontend":{"public_path":"'$PUBLIC_PATH'","hostname":"'$VELOX_FRONTEND_HOSTNAME'","use_plain_http":true},"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":true}, "Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"GUI":{"bind_address":"'$BIND_ADDRESS'","use_plain_http":true},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
+			./velociraptor config generate > server.config.yaml --merge '{"Frontend":{"public_path":"'$PUBLIC_PATH'","hostname":"'$VELOX_FRONTEND_HOSTNAME'","use_plain_http":true},"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":"'$VELOX_SELF_SIGNED'"}, "Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"GUI":{"bind_address":"'$BIND_ADDRESS'","use_plain_http":true},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
     		    #sed -i "s#https://localhost:8000/#$VELOX_CLIENT_URL#" server.config.yaml
 			sed -i 's#/tmp/velociraptor#.#'g server.config.yaml
 			./velociraptor --config server.config.yaml user add $VELOX_USER $VELOX_PASSWORD --role $VELOX_ROLE
 		else
-			./velociraptor config generate > server.config.yaml --merge '{"Frontend":{"public_path":"'$PUBLIC_PATH'","hostname":"'$VELOX_FRONTEND_HOSTNAME'","use_plain_http":false},"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":true}, "Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"GUI":{"bind_address":"'$BIND_ADDRESS'","use_plain_http":false},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
+			./velociraptor config generate > server.config.yaml --merge '{"Frontend":{"public_path":"'$PUBLIC_PATH'","hostname":"'$VELOX_FRONTEND_HOSTNAME'","use_plain_http":false},"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":"'$VELOX_SELF_SIGNED'"}, "Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"GUI":{"bind_address":"'$BIND_ADDRESS'","use_plain_http":false},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
     		    #sed -i "s#https://localhost:8000/#$VELOX_CLIENT_URL#" server.config.yaml
 			sed -i 's#/tmp/velociraptor#.#'g server.config.yaml
 			./velociraptor --config server.config.yaml user add $VELOX_USER $VELOX_PASSWORD --role $VELOX_ROLE
@@ -39,7 +44,7 @@ if [[ ! -f server.config.yaml ]]; then
 	# Azure SSO Config
 	elif [[ "$VELOX_SSO" = true && "${VELOX_SSO_TYPE,,}" = "azure" ]]; then
 		if [[ "$VELOX_PLAIN_HTTP" = true ]]; then
-			./velociraptor config generate > server.config.yaml --merge '{"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":true},"Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"Frontend":{"hostname":"'$VELOX_FRONTEND_HOSTNAME'","public_path":"'$PUBLIC_PATH'","use_plain_http":true},"GUI":{"Authenticator":{"oauth_client_id":"'$VELOX_AZURE_CLIENTID'","oauth_client_secret":"'$VELOX_AZURE_SECRET'","tenant":"'$VELOX_AZURE_TENANT'","type":"'$VELOX_SSO_TYPE'"},"bind_address":"'$BIND_ADDRESS'","public_url":"'$VELOX_GUI_URL'","use_plain_http":true},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
+			./velociraptor config generate > server.config.yaml --merge '{"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":"'$VELOX_SELF_SIGNED'"},"Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"Frontend":{"hostname":"'$VELOX_FRONTEND_HOSTNAME'","public_path":"'$PUBLIC_PATH'","use_plain_http":true},"GUI":{"Authenticator":{"oauth_client_id":"'$VELOX_AZURE_CLIENTID'","oauth_client_secret":"'$VELOX_AZURE_SECRET'","tenant":"'$VELOX_AZURE_TENANT'","type":"'$VELOX_SSO_TYPE'"},"bind_address":"'$BIND_ADDRESS'","public_url":"'$VELOX_GUI_URL'","use_plain_http":true},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
 	    	    #sed -i "s#https://localhost:8000/#$VELOX_CLIENT_URL#" server.config.yaml
 			sed -i 's#/tmp/velociraptor#.#'g server.config.yaml
 			./velociraptor --config server.config.yaml user add $VELOX_FIRST_USER --role $VELOX_ROLE
@@ -48,7 +53,7 @@ if [[ ! -f server.config.yaml ]]; then
 			#		./velociraptor --config server.config.yaml user add $user --role $VELOX_ROLE
 			#	done
 		else
-			./velociraptor config generate > server.config.yaml --merge '{"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":true},"Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"Frontend":{"hostname":"'$VELOX_FRONTEND_HOSTNAME'","public_path":"'$PUBLIC_PATH'","use_plain_http":false},"GUI":{"Authenticator":{"oauth_client_id":"'$VELOX_AZURE_CLIENTID'","oauth_client_secret":"'$VELOX_AZURE_SECRET'","tenant":"'$VELOX_AZURE_TENANT'","type":"'$VELOX_SSO_TYPE'"},"bind_address":"'$BIND_ADDRESS'","public_url":"'$VELOX_GUI_URL'","use_plain_http":false},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
+			./velociraptor config generate > server.config.yaml --merge '{"API":{"bind_address":"'$BIND_ADDRESS'"},"Client":{"server_urls":["'$VELOX_SERVER_URL'"],"use_self_signed_ssl":"'$VELOX_SELF_SIGNED'"},"Datastore":{"filestore_directory":"'$FILESTORE_DIRECTORY'","location":"'$DATASTORE_LOCATION'"},"Frontend":{"hostname":"'$VELOX_FRONTEND_HOSTNAME'","public_path":"'$PUBLIC_PATH'","use_plain_http":false},"GUI":{"Authenticator":{"oauth_client_id":"'$VELOX_AZURE_CLIENTID'","oauth_client_secret":"'$VELOX_AZURE_SECRET'","tenant":"'$VELOX_AZURE_TENANT'","type":"'$VELOX_SSO_TYPE'"},"bind_address":"'$BIND_ADDRESS'","public_url":"'$VELOX_GUI_URL'","use_plain_http":false},"Logging":{"output_directory":"'$LOG_DIR'","separate_logs_per_component":true},"Monitoring":{"bind_address":"'$BIND_ADDRESS'"}}'
 	    	    #sed -i "s#https://localhost:8000/#$VELOX_CLIENT_URL#" server.config.yaml
 			sed -i 's#/tmp/velociraptor#.#'g server.config.yaml
 			./velociraptor --config server.config.yaml user add $VELOX_FIRST_USER --role $VELOX_ROLE
@@ -62,6 +67,12 @@ fi
 
 # Re-generate client config in case server config changed
 ./velociraptor --config server.config.yaml config client > client.config.yaml
+
+# Check for commenting out pinned_server_name before repack of clients
+if [[ "${VELOX_CLIENT_FQDN,,}" = true ]]; then
+	sed -i -e "s/pinned_server_name/\ \ \#\ pinned_server_name/" server.config.yaml
+	sed -i -e "s/pinned_server_name/\ \ \#\ pinned_server_name/" client.config.yaml
+fi
 
 # Repack clients
 ./velociraptor config repack --exe clients/linux/velociraptor_client client.config.yaml clients/linux/velociraptor_client_repacked

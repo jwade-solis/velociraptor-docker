@@ -3,6 +3,7 @@ LABEL version="Velociraptor Custom"
 LABEL description="Velociraptor server in a Docker container"
 LABEL maintainer="Wes Lambert, @therealwlambert"
 COPY ./entrypoint .
+COPY dev/ /opt/velociraptor/dev/
 RUN chmod +x entrypoint && \
     apt-get update && \
     apt-get install -y curl wget jq rsync && \
@@ -21,7 +22,6 @@ RUN chmod +x entrypoint && \
     # Clean up 
     apt-get remove -y --purge curl jq && \
     apt-get clean
-COPY dev/ /opt/velociraptor/dev/
 WORKDIR /velociraptor 
 CMD ["/entrypoint"]
 

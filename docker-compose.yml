@@ -2,7 +2,7 @@ version: "3"
 services:
   velociraptor:
     container_name: velociraptor
-    #image: wlambert/velociraptor
+    #image: jwade1/velo-docker:latest
     build:
       context: ./
       dockerfile: Dockerfile
@@ -14,15 +14,18 @@ services:
       - VELOX_ROLE=${VELOX_ROLE}
       - VELOX_SERVER_URL=${VELOX_SERVER_URL}
       - VELOX_FRONTEND_HOSTNAME=${VELOX_FRONTEND_HOSTNAME}
-      - VELOX_DEV=${VELOX_DEV:-false}
+      - VELOX_DEV=${VELOX_DEV}
       - VELOX_PLAIN_HTTP=${VELOX_PLAIN_HTTP}
       - VELOX_GUI_URL=${VELOX_GUI_URL}
-      - VELOX_SSO=${VELOX_SSO:-false}
+      - VELOX_SSO=${VELOX_SSO}
       - VELOX_SSO_TYPE=${VELOX_SSO_TYPE}
       - VELOX_AZURE_CLIENTID=${VELOX_AZURE_CLIENTID}
       - VELOX_AZURE_SECRET=${VELOX_AZURE_SECRET}
       - VELOX_AZURE_TENANT=${VELOX_AZURE_TENANT}
       - VELOX_FIRST_USER=${VELOX_FIRST_USER}
+      - VELOX_CLIENT_FQDN=${VELOX_CLIENT_FQDN}
+      - VELOX_SELF_SIGNED=${VELOX_SELF_SIGNED}
+      - VELOX_LOG_DIR=${VELOX_LOG_DIR}
     ports:
       - "8000:8000"
       - "8001:8001"
