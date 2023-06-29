@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 LABEL version="Velociraptor Custom"
 LABEL description="Velociraptor server in a Docker container"
-LABEL maintainer="Wes Lambert, @therealwlambert"
+LABEL maintainer="Jeff Wade, @jwade-1"
 COPY ./entrypoint .
 COPY dev/ /opt/velociraptor/dev/
 RUN chmod +x entrypoint && \
